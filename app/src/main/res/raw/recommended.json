@@ -1,0 +1,196 @@
+{
+  "status": "ok",
+  "id":7,
+  "recs": [
+    {
+      "app_name": "Ребусы",
+      "app_descr": "разгадай ребусы",
+      "app_package": "com.if3games.whatstheword.rebusrus",
+      "app_icon": "ic_reb"
+    },
+    {
+      "app_name": "Найди слова",
+      "app_descr": "соедини буквы!",
+      "app_package": "com.if3games.findword",
+      "app_icon": "ic_find_word_rus"
+    },
+    {
+      "app_name": "Угадай слово!",
+      "app_descr": "угадывай слова!",
+      "app_package": "com.if3games.whatstheword.fourpicsonewordrus",
+      "app_icon": "ic_guess_the_word_rus"
+    },
+    {
+      "app_name": "Угадай цвет!",
+      "app_descr": "эти цвета повсюду",
+      "app_package": "com.if3games.whatstheword.colormaniarus",
+      "app_icon": "ic_colormania_rus"
+    },
+    {
+      "app_name": "Тест по математике",
+      "app_descr": "проверь смекалку",
+      "app_package": "com.if3games.mathgames.matchgenius",
+      "app_icon": "ic_math_rus"
+    },
+    {
+      "app_name": "Слова из слова",
+      "app_descr": "составь слова из слова",
+      "app_package": "com.if3games.whatstheword.slovaizslovarus",
+      "app_icon": "ic_slova_iz_slova"
+    },
+    {
+      "app_name": "Загадки для всех",
+      "app_descr": "отгадай загадки",
+      "app_package": "com.if3games.whatstheword.zagadkirus",
+      "app_icon": "ic_skazki"
+    },
+    {
+      "app_name": "Анаграммы",
+      "app_descr": "слово в слове",
+      "app_package": "com.if3games.whatstheword.anagrammrus",
+      "app_icon": "ic_anagramm_rus"
+    },
+    {
+      "app_name": "Верю не верю",
+      "app_descr": "правда или ложь?",
+      "app_package": "com.if3games.whatstheword.truefalse",
+      "app_icon": "ic_true_false"
+    },
+    {
+      "app_name": "What The Riddle?",
+      "app_descr": "100 Riddles",
+      "app_package": "com.if3games.whatstheword.riddleeng",
+      "app_icon": "ic_whattr"
+    },
+    {
+      "app_name": "Guess The Word",
+      "app_descr": "guess the word",
+      "app_package": "com.if3games.whatstheword.fourpicsoneword",
+      "app_icon": "ic_guess_the_word_eng"
+    },
+    {
+      "app_name": "Guess The Color!",
+      "app_descr": "memory test",
+      "app_package": "com.if3games.whatstheword.colormaniaeng",
+      "app_icon": "ic_colormania_eng"
+    },
+    {
+      "app_name": "Logo Quiz",
+      "app_descr": "guess the brand",
+      "app_package": "com.if3games.quizgamelogo",
+      "app_icon": "ic_logo_quiz"
+    },
+    {
+      "app_name": "4096",
+      "app_descr": "make 4096",
+      "app_package": "com.if3games.game2048",
+      "app_icon": "ic_4096"
+    },
+    {
+      "app_name": "new 4096",
+      "app_descr": "make 4096",
+      "app_package": "com.if3games.new4096",
+      "app_icon": "ic_4096new"
+    },
+    {
+      "app_name": "True | False",
+      "app_descr": "true or false?",
+      "app_package": "com.if3games.whatstheword.truefalseeng",
+      "app_icon": "ic_true_false"
+    },
+    {
+      "app_name": "Escape number",
+      "app_descr": "escape number",
+      "app_package": "com.if3games.escapenumber",
+      "app_icon": "ic_escape_number"
+    },
+    {
+      "app_name": "Logo Quiz 2",
+      "app_descr": "guess the brand",
+      "app_package": "com.if3games.whatstheword.guessthebrandeng",
+      "app_icon": "ic_guess_the_brand"
+    },
+    {
+      "app_name": "Math Test",
+      "app_descr": "math test",
+      "app_package": "com.if3games.mathgames.mathkingeng",
+      "app_icon": "ic_math_rus"
+    }],
+  "apptypes": [
+    {
+      "type": 0,
+      "rec_id": "p1"
+    },
+    {
+      "type": 0,
+      "rec_id": "p2"
+    },
+    {
+      "type": 0,
+      "rec_id": "p3"
+    },
+    {
+      "type": 0,
+      "rec_id": "p4"
+    },
+    {
+      "type": 0,
+      "rec_id": "p5"
+    },
+    {
+      "type": 0,
+      "rec_id": "p6"
+    },
+    {
+      "type": 0,
+      "rec_id": "p7"
+    },
+    {
+      "type": 0,
+      "rec_id": "p8"
+    },
+    {
+      "type": 0,
+      "rec_id": "p9"
+    },
+    {
+      "type": 1,
+      "rec_id": "p10"
+    },
+    {
+      "type": 1,
+      "rec_id": "p11"
+    },
+    {
+      "type": 1,
+      "rec_id": "p12"
+    },
+    {
+      "type": 1,
+      "rec_id": "p13"
+    },
+    {
+      "type": 1,
+      "rec_id": "p14"
+    },
+    {
+      "type": 1,
+      "rec_id": "p15"
+    },
+    {
+      "type": 1,
+      "rec_id": "p16"
+    },
+    {
+      "type": 1,
+      "rec_id": "p17"
+    },
+    {
+      "type": 1,
+      "rec_id": "p18"
+    },
+    {
+      "type": 1,
+      "rec_id": "p19"
+    }]
+}

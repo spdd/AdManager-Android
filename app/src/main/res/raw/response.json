@@ -1,0 +1,44 @@
+{
+  "status": "ok",
+  "show_freq": 6,
+  "ads_interstitial": [
+    {
+      "adname": "admob",
+      "admob_inter_id": "ca-app-pub-9692610173697432/9754317873",
+      "admob_banner_id": "1"
+    },
+    {
+      "adname": "chartboost",
+      "cb_appId": "5259290a17ba472650000010",
+      "cb_appSigh": "1efed4958175b3cb003ba8aedd78e9a96b64daa4"
+    }],
+  "ads_video": [
+    {
+      "adname": "unity_ads",
+      "unity_ads_id": "1017271"
+    },
+    {
+      "adname": "chartboost",
+      "cb_appId": "5259290a17ba472650000010",
+      "cb_appSigh": "1efed4958175b3cb003ba8aedd78e9a96b64daa4"
+    },
+    {
+      "adname": "adcolony",
+      "ac_appId": "appdc57d53df2c44bbe87",
+      "ac_zoneId": "vz74c46d9960d34e8ea8"
+    }],
+  "precache_interstitial": [
+    {
+      "adname": "image",
+      "banner_url": "http://a4.mzstatic.com/eu/r30/Purple5/v4/1f/91/ed/1f91ed1c-f03c-8e58-35bf-644cb8d76b6e/icon320x320.png",
+      "store_url": "com.if3games.whatstheword.fourpicsonewordrus",
+      "app_descr":"Наша игра - Угадай слово!"
+    }],
+  "precache_video": [
+    {
+      "adname": "image",
+      "banner_url": "http://a4.mzstatic.com/eu/r30/Purple5/v4/1f/91/ed/1f91ed1c-f03c-8e58-35bf-644cb8d76b6e/icon320x320.png",
+      "store_url": "com.if3games.whatstheword.fourpicsonewordrus",
+      "app_descr":"Наша игра - Угадай слово!"
+    }]
+}

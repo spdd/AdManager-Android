@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:padding="0dp"
+    android:layout_marginBottom="5.0dp"
+    android:layout_marginTop="5.0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:weightSum="3.0">
+        <LinearLayout android:gravity="left" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.25">
+            <ImageView
+                android:id="@+id/rec_icon"
+                android:layout_gravity="left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_fw" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="0.75">
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/recAppTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:text="Level of Mars"
+                android:textSize="18dp" />
+            <TextView
+                android:clickable="false"
+                android:layout_gravity="center"
+                android:id="@+id/recAppDescr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="3x3 board, 3 color, 3 goals"
+                android:textSize="13dp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/playLSLL" android:gravity="right" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <Button
+                android:textSize="15.0dp"
+                android:layout_gravity="center"
+                android:id="@+id/recButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Free"
+                android:layout_weight="1.0" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

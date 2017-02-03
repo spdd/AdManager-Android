@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.if3games.admanager.R;
 import com.if3games.admanager.ads.common.AdAgent;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.PrecacheListener;
 import com.if3games.admanager.ads.recommended.RecommendManager;
 import com.if3games.admanager.ads.utils.ImageManager;
@@ -55,17 +56,11 @@ public class PrecacheAdapter implements AdapterInterface {
     }
 
     @Override
-    public void initAd(final Context context, JSONObject params) {
-        String appDescr = null;
-        String imageUrl = null;
-        String storeUrl = null;
-        try {
-            appDescr = params.getString("app_descr");
-            imageUrl = params.getString("banner_url");
-            storeUrl = params.getString("store_url");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void initAd(final Context context, AdUnit params) {
+        String appDescr = params.app_descr; //.getString("app_descr");
+        String imageUrl = params.banner_url; //.getString("banner_url");
+        String storeUrl = params.store_url; //.getString("store_url");
+
         Logger.logAds(AdAgent.AdType.INTERSTITIAL, "initialize Precache image");
         bannerDialog = new BannerDialog(context, imageUrl, storeUrl, appDescr);
     }

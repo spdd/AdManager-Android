@@ -8,10 +8,9 @@ import com.chartboost.sdk.CBLocation;
 import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.ChartboostDelegate;
 import com.chartboost.sdk.Model.CBError;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.if3games.admanager.ads.utils.Logger;
-
-import org.json.JSONObject;
 
 /**
  * Created by supergoodd on 03.10.15.
@@ -82,12 +81,12 @@ public class ChartboostVideoAdapter implements AdapterInterface {
     }
 
     @Override
-    public void initAd(Context context, JSONObject params) {
+    public void initAd(Context context, AdUnit params) {
         String appId = null;
         String appSign = null;
         try {
-            appId = params.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
-            appSign = params.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
+            appId = params.cb_appId; //.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
+            appSign = params.cb_appSigh; //.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
             Log.d("CB_Video : appId", appId == null ? "null" : appId);
             Log.d("CB_Video : appSigh", appSign == null ? "null" : appSign);
         } catch (Exception e) {

@@ -3,12 +3,10 @@ package com.if3games.admanager.ads.common;
 import android.os.CountDownTimer;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.SettingsManager;
 import com.if3games.admanager.ads.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,16 +57,16 @@ public class AdAgent implements AdObject.AdObjectListener {
         Logger.log("AdsAgent in thread : " + Thread.currentThread().getName());
     }
 
-    public void push(JSONObject data, int cost) throws JSONException {
-        if (data.has("adname")) {
-            String adName = data.getString("adname");
+    public void push(AdUnit data, int cost) {
+        if (data.adname != null) {
+            String adName = data.adname;
             long lastClickedTime = SettingsManager.getLongValue(adName);
             if (lastClickedTime > 0 && !Utils.isAdOverClickerTimeout(lastClickedTime))
                 return;
         }
         if (disabledNetworks != null) {
-            if (data.has("adname")) {
-                String adName = data.getString("adname");
+            if (data.adname != null) {
+                String adName = data.adname;
                 for (String ad : disabledNetworks) {
                     if (adName.trim().equals(ad)) {
                         return;
@@ -84,10 +82,10 @@ public class AdAgent implements AdObject.AdObjectListener {
         //failedLoadsCounter = 0;
     }
 
-    public void pushPrecache(JSONObject data, int cost) throws JSONException {
+    public void pushPrecache(AdUnit data, int cost) {
         if (disabledNetworks != null) {
-            if (data.has("adname")) {
-                String adName = data.getString("adname");
+            if (data.adname != null) {
+                String adName = data.adname;
                 for (String ad : disabledNetworks) {
                     if (adName.trim().equals(ad)) {
                         return;
@@ -184,7 +182,7 @@ public class AdAgent implements AdObject.AdObjectListener {
      * Disable network
       */
 
-    public void disableNetwork(String network) throws JSONException {
+    public void disableNetwork(String network) {
         if (mAdType == AdType.INTERSTITIAL && network.trim().equals("admob")) {
             isPrecacheDisabled = true;
         }
@@ -198,11 +196,11 @@ public class AdAgent implements AdObject.AdObjectListener {
         disabledNetworks.add(network);
     }
 
-    private void disableAds(String network, List<AdObject> ads) throws JSONException {
+    private void disableAds(String network, List<AdObject> ads) {
         List<AdObject> tmpList = new ArrayList<>(ads);
         for (AdObject obj : tmpList) {
-            if (obj.requestData.has("adname")) {
-                if(obj.requestData.getString("adname").trim().equals(network)) {
+            if (obj.requestData.adname != null) {
+                if(obj.requestData.adname.trim().equals(network)) {
                     ads.remove(obj);
                 }
             }
@@ -213,11 +211,11 @@ public class AdAgent implements AdObject.AdObjectListener {
      * networks info
       */
 
-    public boolean isContainNetwork(String network) throws JSONException {
+    public boolean isContainNetwork(String network) {
         List<AdObject> tmpList = new ArrayList<>(adsList);
         for (AdObject obj : tmpList) {
-            if (obj.requestData.has("adname")) {
-                if(obj.requestData.getString("adname").trim().equals(network)) {
+            if (obj.requestData.adname != null) {
+                if(obj.requestData.adname.trim().equals(network)) {
                     return true;
                 }
             }
@@ -225,12 +223,12 @@ public class AdAgent implements AdObject.AdObjectListener {
         return false;
     }
 
-    public void setNetworkToTop(String adName) throws JSONException {
+    public void setNetworkToTop(String adName) {
         isPrecacheTmpDisabled = true;
         List<AdObject> tmpList = new ArrayList<>(adsList);
         for (AdObject obj : tmpList) {
-            if (obj.requestData.has("adname")) {
-                if(obj.requestData.getString("adname").trim().equals(adName)) {
+            if (obj.requestData.adname != null) {
+                if(obj.requestData.adname.trim().equals(adName)) {
                     obj.setObjectToTop();
                     return;
                 }
@@ -366,14 +364,14 @@ public class AdAgent implements AdObject.AdObjectListener {
       */
 
     @Override
-    public void refreshAdObjects() throws JSONException {
+    public void refreshAdObjects() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 synchronized (adsList) {
                     try {
                         sort(adsList);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     if (adsList.get(0).getCalculatedCost() < 0.05) {
@@ -453,7 +451,7 @@ public class AdAgent implements AdObject.AdObjectListener {
         try {
             disableNetwork(adName);
             SettingsManager.setLongValue(adName, System.currentTimeMillis());
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -462,7 +460,7 @@ public class AdAgent implements AdObject.AdObjectListener {
      *
      */
 
-    public void sort(List<AdObject> items) throws JSONException {
+    public void sort(List<AdObject> items) throws Exception {
         Logger.log("Sort in thread : " + Thread.currentThread().getName());
         int sortedRangeEnd = 0;
         while (sortedRangeEnd < items.size()) {
@@ -475,13 +473,13 @@ public class AdAgent implements AdObject.AdObjectListener {
             for (AdObject item : items){
                 if (mAdType == AdType.BANNER) {
                     Logger.log(String.format("Sorted List Banner: %s, cost: %f",
-                            item.requestData.getString("adname"), item.getCalculatedCost()));
+                            item.requestData.adname, item.getCalculatedCost()));
                 } else if (mAdType == AdType.INTERSTITIAL) {
                     Logger.log(String.format("Sorted List Interstitial: %s, cost: %f",
-                            item.requestData.getString("adname"), item.getCalculatedCost()));
+                            item.requestData.adname, item.getCalculatedCost()));
                 } else if (mAdType == AdType.VIDEO) {
                     Logger.log(String.format("Sorted List Video: %s, cost: %f",
-                            item.requestData.getString("adname"), item.getCalculatedCost()));
+                            item.requestData.adname, item.getCalculatedCost()));
                 }
             }
         }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.if3games.admanager.ads.utils.Logger;
 import com.jirbo.adcolony.AdColony;
@@ -44,16 +45,12 @@ public class AdColonyAdapter implements AdapterInterface, AdColonyAdListener, Ad
     }
 
     @Override
-    public void initAd(Context context, JSONObject params) {
+    public void initAd(Context context, AdUnit params) {
         try {
-            String appId = null;
-            zoneId = null;
-            try {
-                appId = params.getString("ac_appId"); //ConstantsManager.getInstance().getConstants().AC_APP_ID;
-                zoneId = params.getString("ac_zoneId"); //ConstantsManager.getInstance().getConstants().AC_ZONE_ID;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String appId = params.ac_appId;
+            zoneId = params.ac_zoneId;
+                 //.getString("ac_appId"); //ConstantsManager.getInstance().getConstants().AC_APP_ID;
+                 //.getString("ac_zoneId"); //ConstantsManager.getInstance().getConstants().AC_ZONE_ID;
 
             if (appId == null || zoneId == null) {
                 return;

@@ -8,8 +8,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.if3games.admanager.ads.utils.Logger;
 
-import org.json.JSONObject;
-
 /**
  * Created by supergoodd on 25.01.17.
  */
@@ -52,7 +50,7 @@ public class FirebaseConfigLoader extends ConfigLoader {
     }
 
     @Override
-    public JSONObject fetch() {
+    public AdConfig fetch() {
         if (mRemoteConfig == null)
             return runTask();
         else

@@ -16,6 +16,8 @@ import com.if3games.admanager.ads.adapters.AdapterInterface;
 import com.if3games.admanager.ads.adapters.PrecacheAdapter;
 import com.if3games.admanager.ads.common.AdAgent;
 import com.if3games.admanager.ads.common.InstanceFactory;
+import com.if3games.admanager.ads.config.AdConfig;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.config.ConfigLoader;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.Utils;
@@ -24,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -302,7 +305,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
     }
 
     @Override
-    public void onConfigLoaded(final JSONObject config) {
+    public void onConfigLoaded(final AdConfig config) {
         Logger.log("onConfigLoaded in thread: " + Thread.currentThread().getName());
         new Thread(new Runnable() {
             public void run() {
@@ -310,6 +313,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
                 if (config != null) {
                     //adsAgent.clear();
                     try {
+                        /*
                         if (!config.has(String.format("ads_%s", controllerPrefix))) {
                             if(config.has("message")) {
                                 String message = config.getString("message");
@@ -321,8 +325,9 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
                             }
                             return;
                         }
+                        */
                         isNoNeedLoad = false;
-
+                        /*
                         // first precache
                         JSONArray precacheArray = config.getJSONArray(String.format("precache_%s", controllerPrefix));
                         if(precacheArray != null) {
@@ -339,15 +344,16 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
                         } else {
                             Logger.logAds(controllerType, "Precache is empty or new launch");
                         }
+                        */
 
                         // second ads
-                        JSONArray adsArray = config.getJSONArray(String.format("ads_%s", controllerPrefix));
-                        Logger.logAds(controllerType, String.format("adsArray size: %d", adsArray.length()));
+                        List<AdUnit> adsArray = config.getAdsList(controllerType);
+                        Logger.logAds(controllerType, String.format("adsArray size: %d", adsArray.size()));
                         if (adsArray != null) {
                             int cost = 1;
-                            for (int i = 0; i < adsArray.length(); i++) {
-                                adsAgent.push(adsArray.getJSONObject(i), cost);
-                                Logger.logAds(controllerType, String.format("ads: %s", adsArray.getJSONObject(i).getString("adname")));
+                            for (int i = 0; i < adsArray.size(); i++) {
+                                adsAgent.push(adsArray.get(i), cost);
+                                Logger.logAds(controllerType, String.format("ads: %s", adsArray.get(i).adname));
                                 cost++;
                             }
                         }

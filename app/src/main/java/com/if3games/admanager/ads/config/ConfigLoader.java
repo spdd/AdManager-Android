@@ -4,14 +4,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import com.google.gson.Gson;
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.AdsManager;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.SettingsManager;
 import com.if3games.admanager.ads.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,11 +25,10 @@ import java.net.URLConnection;
 public class ConfigLoader {
     public interface Listener {
         void onConfigFailedToLoad(int errorCode);
-        void onConfigLoaded(JSONObject config);
+        void onConfigLoaded(AdConfig config);
     }
     private Listener mListener;
     public Context mContext;
-    //private String adParseConfig = null;
 
     public ConfigLoader(Context context, Listener listener) {
         this.mContext = context;
@@ -50,29 +47,24 @@ public class ConfigLoader {
         runAdJob();
     }
 
-    private JSONObject loadFromFile(String config) {
+    private AdConfig loadFromFile(String config) {
         if (config == null && Utils.hasValidConfig()) {
             Logger.log("Config from cache: " + Utils.getAdConfig());
             //mListener.onConfigLoaded(getDataDict(config));
             return getDataDict(config);
         }
 
-        JSONObject json = getDataDict(config);
+        AdConfig json = getDataDict(config);
         if (json == null) {
             String result = getLocalFileConfig();
             try {
-                json = new JSONObject(result);
-            } catch (JSONException e) {
+                Gson gson = new Gson();
+                json = gson.fromJson(result, AdConfig.class);
+                //json = new JSONObject(result);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        /*
-        if (json != null)
-            mListener.onConfigLoaded(json);
-        else
-            mListener.onConfigFailedToLoad(0);
-            */
         return json;
     }
 
@@ -104,7 +96,7 @@ public class ConfigLoader {
         return json;
     }
 
-    private JSONObject loadFromUrl(String urlString) {
+    private AdConfig loadFromUrl(String urlString) {
         try {
             Logger.log("Loading config from URL: " + urlString);
 
@@ -139,17 +131,9 @@ public class ConfigLoader {
                 if (result == null || result.isEmpty() || result.equals(" ")) {
                     return loadFromFile(null);
                 }
+                Logger.log("Config From custom URL: " + result);
+                return loadFromFile(result);
 
-                JSONObject json = null;
-                try {
-                    json = new JSONObject(result);
-                    Logger.log("Config From custop URL: " + result);
-                    return loadFromFile(result);
-                } catch (JSONException e) {
-                    Logger.log("Config json error");
-                    e.printStackTrace();
-                    return loadFromFile(null);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
                 Logger.log(e.getMessage());
@@ -165,7 +149,7 @@ public class ConfigLoader {
         }
     }
 
-    private JSONObject getDataDict(String config) {
+    private AdConfig getDataDict(String config) {
         String json;
         boolean isLocalConfig = false;
         if (config == null) {
@@ -174,22 +158,24 @@ public class ConfigLoader {
         } else {
             json = config;
         }
-        JSONObject result = null;
+        AdConfig result = null;
         try {
-            result = new JSONObject(json);
+            Gson gson = new Gson();
+            result = gson.fromJson(json, AdConfig.class);
+            //result = new JSONObject(json);
             // save ad config for 24 hours (only from internet!), if ad config not available load from cache
             if(!Utils.hasValidConfig() && !isLocalConfig) {
                 Logger.log("Save Config");
                 Utils.saveAdConfig(json);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Logger.log("Config json error");
             e.printStackTrace();
         }
         return result;
     }
 
-    public JSONObject runTask() {
+    public AdConfig runTask() {
         if (Utils.hasValidConfig()) {
             String config = Utils.getAdConfig();
             Logger.log("Config from cache: " + config);
@@ -197,44 +183,38 @@ public class ConfigLoader {
             return getDataDict(config);
         }
 
-        JSONObject configJson = getDataDict(null);
-        String configFromUrl = null;
-        try {
-            configFromUrl = configJson.getString("config_from_url");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        AdConfig configJson = getDataDict(null);
+        String configFromUrl = configJson.getIsConfigFromUrl();
+
         if (configFromUrl != null && configFromUrl.trim().equals("0")) {
             return loadFromFile(null);
         }
 
-        String urlString = null;
-        try {
-            urlString = configJson.getString("config_url");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return loadFromUrl(urlString);
+        String urlString = configJson.getConfigUrl();
+        if (urlString != null && !urlString.equals(""))
+            return loadFromUrl(urlString);
+        else
+            return loadFromFile(null);
     }
 
-    public JSONObject runTaskWithConfig(String config) {
+    public AdConfig runTaskWithConfig(String config) {
         return loadFromFile(config);
     }
 
-    public JSONObject fetch() {
+    public AdConfig fetch() {
         return runTask();
     }
 
 
-    private class JobAsyncTask extends AsyncTask<Void, Void, JSONObject> {
+    private class JobAsyncTask extends AsyncTask<Void, Void, AdConfig> {
 
         @Override
-        protected JSONObject doInBackground(Void... params) {
+        protected AdConfig doInBackground(Void... params) {
             return fetch();
         }
 
         @Override
-        protected void onPostExecute(JSONObject json) {
+        protected void onPostExecute(AdConfig json) {
             super.onPostExecute(json);
             try {
                 if (mListener != null) {

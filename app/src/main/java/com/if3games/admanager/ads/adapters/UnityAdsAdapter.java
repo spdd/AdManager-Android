@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.unity3d.ads.android.IUnityAdsListener;
 import com.unity3d.ads.android.UnityAds;
-
-import org.json.JSONObject;
 
 /**
  * Created by supergoodd on 07.10.15.
@@ -38,13 +37,8 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     }
 
     @Override
-    public void initAd(Context context, JSONObject params) {
-        String appId = null;
-        try {
-            appId = params.getString("unity_ads_id"); //ConstantsManager.getInstance().getConstants().UNITYADS_APPID; //
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void initAd(Context context, AdUnit params) {
+        String appId = params.unity_ads_id; //.getString("unity_ads_id"); //ConstantsManager.getInstance().getConstants().UNITYADS_APPID; //
         if (!isInitialized) {
             UnityAds.init((Activity) context, appId, this);
             isInitialized = true;

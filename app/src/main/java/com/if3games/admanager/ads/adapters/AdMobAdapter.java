@@ -6,10 +6,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by supergoodd on 30.09.15.
@@ -69,13 +67,8 @@ public class AdMobAdapter implements AdapterInterface {
     }
 
     @Override
-    public void initAd(Context context, JSONObject params) {
-        String adId = null; //ConstantsManager.getInstance().getConstants().INTERSTITIAL_APPID;
-        try {
-            adId = params.getString("admob_inter_id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void initAd(Context context, AdUnit params) {
+        String adId = params .admob_inter_id; //.getString("admob_inter_id");
         interstitial = new InterstitialAd(context);
         interstitial.setAdUnitId(adId);
         AdRequest.Builder reqBuilder = new AdRequest.Builder();

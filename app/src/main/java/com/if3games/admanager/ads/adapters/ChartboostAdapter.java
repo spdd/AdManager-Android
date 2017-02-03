@@ -8,6 +8,7 @@ import com.chartboost.sdk.CBLocation;
 import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.ChartboostDelegate;
 import com.chartboost.sdk.Model.CBError;
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.if3games.admanager.ads.utils.Logger;
 
@@ -75,12 +76,12 @@ public class ChartboostAdapter implements AdapterInterface {
     }
 
     @Override
-    public void initAd(Context context, JSONObject params) {
+    public void initAd(Context context, AdUnit params) {
         String appId = null;
         String appSign = null;
         try {
-            appId = params.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
-            appSign = params.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
+            appId = params.cb_appId; //.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
+            appSign = params.cb_appSigh; //.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
             Log.d("CB_Inter : appId", appId == null ? "null" : appId);
             Log.d("CB_Inter : appSigh", appSign == null ? "null" : appSign);
         } catch (Exception e) {

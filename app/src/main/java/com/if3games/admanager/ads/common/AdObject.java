@@ -1,5 +1,6 @@
 package com.if3games.admanager.ads.common;
 
+import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.utils.Logger;
 
 import org.json.JSONException;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
  */
 public class AdObject {
     public interface AdObjectListener {
-        void refreshAdObjects() throws JSONException;
+        void refreshAdObjects();
         AdAgent.AdType getAdType();
         void onAdFailedLoad();
         void onAdPrecacheFailedLoad();
@@ -20,7 +21,7 @@ public class AdObject {
     }
     private AdObjectListener mListener;
 
-    public JSONObject requestData;
+    public AdUnit requestData;
     public String adName = null;
     public boolean isFailed = false;
     public boolean isVideoCached = false;
@@ -34,11 +35,11 @@ public class AdObject {
     private int tryLoaderCounter = 0;
     private int clickCounter = 0;
 
-    public AdObject(JSONObject requestData, int cost, AdObjectListener listener) {
+    public AdObject(AdUnit requestData, int cost, AdObjectListener listener) {
         this.requestData = requestData;
         try {
-            this.adName = requestData.getString("adname");
-        } catch (JSONException e) {
+            this.adName = requestData.adname;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         this.mListener = listener;
@@ -149,7 +150,7 @@ public class AdObject {
     /**
      * manipulate costs
       */
-    public void setObjectToTop() throws JSONException {
+    public void setObjectToTop() {
         failedCounter = 0;
         cost = 0;
         if (mListener != null) {

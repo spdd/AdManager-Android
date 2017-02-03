@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1096143419737",
+    "firebase_url": "https://project-8830461958116574337.firebaseio.com",
+    "project_id": "project-8830461958116574337",
+    "storage_bucket": "project-8830461958116574337.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096143419737:android:cef8d591e4246cd9",
+        "android_client_info": {
+          "package_name": "com.if3games.admanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096143419737-6q3pr0i6sdksf59uf8u1dqovnc01dgpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXI9SI1aQ1TDFKNxU_AFut3d3Z3rhHR6A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096143419737:android:e2bd029851b4a09b",
+        "android_client_info": {
+          "package_name": "com.if3games.whatstheword.rebusrus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096143419737-6q3pr0i6sdksf59uf8u1dqovnc01dgpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXI9SI1aQ1TDFKNxU_AFut3d3Z3rhHR6A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

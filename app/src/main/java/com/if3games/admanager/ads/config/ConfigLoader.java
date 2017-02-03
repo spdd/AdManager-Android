@@ -6,7 +6,6 @@ import android.os.Build;
 
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.AdsManager;
-import com.if3games.admanager.ads.common.InstanceFactory;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.SettingsManager;
 import com.if3games.admanager.ads.utils.Utils;
@@ -31,7 +30,7 @@ public class ConfigLoader {
         void onConfigLoaded(JSONObject config);
     }
     private Listener mListener;
-    private Context mContext;
+    public Context mContext;
     //private String adParseConfig = null;
 
     public ConfigLoader(Context context, Listener listener) {
@@ -47,44 +46,41 @@ public class ConfigLoader {
         }
     }
 
-    /*
-    private void doParse() {
-        ParseConfig.getInBackground(new ConfigCallback() {
-            @Override
-            public void done(ParseConfig config, ParseException e) {
-                adParseConfig = config.getString("ad_config");
-                Logger.log(String.format("Config from Parse is %s!", adParseConfig));
-                runAdJob();
-            }
-        });
+    public void runConfig() {
+        runAdJob();
     }
-    */
 
-    private JSONObject loadFromParse() throws JSONException {
-        try {
-            long loadedTime = SettingsManager.getLongValue(SettingsManager.PARSE_LOAD_TIME);
-            if (!Utils.isLoaderTimeout(loadedTime)) {
-                JSONObject json = new JSONObject(SettingsManager.getStringValue(SettingsManager.ADCONFIG_PARSE_KEY));
-                return json;
-            } else {
-                return loadFromUrl(AdsConstants.ServerType.SERVER);
-            }
-        } catch (Exception e) {
-            return loadFromUrl(AdsConstants.ServerType.SERVER);
+    private JSONObject loadFromFile(String config) {
+        if (config == null && Utils.hasValidConfig()) {
+            Logger.log("Config from cache: " + Utils.getAdConfig());
+            //mListener.onConfigLoaded(getDataDict(config));
+            return getDataDict(config);
         }
-    }
 
-    private JSONObject loadFromFile() throws JSONException {
-        //JSONObject obj = new JSONObject(loadJSONFromAsset());
-        JSONObject obj = new JSONObject(loadJSONFromPrefs());
-        return obj;
+        JSONObject json = getDataDict(config);
+        if (json == null) {
+            String result = getLocalFileConfig();
+            try {
+                json = new JSONObject(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /*
+        if (json != null)
+            mListener.onConfigLoaded(json);
+        else
+            mListener.onConfigFailedToLoad(0);
+            */
+        return json;
     }
 
     private String loadJSONFromPrefs() {
         return SettingsManager.getStringValue(SettingsManager.ADCONFIG_UNITY_KEY);
     }
 
-    public String loadJSONFromAsset() {
+    public String getLocalFileConfig() {
         String json = null;
         try {
             int res = mContext.getResources().getIdentifier(
@@ -108,32 +104,24 @@ public class ConfigLoader {
         return json;
     }
 
-    private JSONObject loadFromUrl(AdsConstants.ServerType serverType) {
+    private JSONObject loadFromUrl(String urlString) {
         try {
-            Logger.log("Loading config from Server");
+            Logger.log("Loading config from URL: " + urlString);
 
             InputStream inputStream = null;
-            URL url = new URL(InstanceFactory.getInstance().createServer(serverType));
+            URL url = new URL(urlString);
             URLConnection conn = url.openConnection();
 
             try {
                 HttpURLConnection httpConn = (HttpURLConnection)conn;
                 httpConn.setRequestMethod("GET");
-                if (serverType == AdsConstants.ServerType.PARSE) {
-                    /*
-                    httpConn.setRequestProperty("X-Parse-Application-Id"
-                            , ConstantsManager.getInstance().getConstants().PARSE_APP_ID);
-                    httpConn.setRequestProperty("X-Parse-REST-API-Key",
-                            ConstantsManager.getInstance().getConstants().PARSE_REST_API_KEY);
-                            */
-                }
                 httpConn.setConnectTimeout(AdsConstants.SERVER_NOT_RESPONDING_TIMEOUT);
                 httpConn.connect();
 
                 if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     inputStream = httpConn.getInputStream();
                 } else {
-                    return null;
+                    return loadFromFile(null);
                 }
                 BufferedReader br = new BufferedReader(new InputStreamReader((inputStream)));
                 StringBuilder sb = new StringBuilder();
@@ -146,22 +134,26 @@ public class ConfigLoader {
 
                 String result = sb.toString();
                 if (result == null) {
-                    return null;
+                    return loadFromFile(null);
                 }
                 if (result == null || result.isEmpty() || result.equals(" ")) {
-                    return null;
+                    return loadFromFile(null);
                 }
 
-                JSONObject json = new JSONObject(result);
-                Logger.log("Config From Server HttpConnection: " + json.toString());
-                if (serverType == AdsConstants.ServerType.PARSE)
-                    return new JSONObject(json.getJSONObject("params").getString("ad_config"));
-                else
-                    return json;
+                JSONObject json = null;
+                try {
+                    json = new JSONObject(result);
+                    Logger.log("Config From custop URL: " + result);
+                    return loadFromFile(result);
+                } catch (JSONException e) {
+                    Logger.log("Config json error");
+                    e.printStackTrace();
+                    return loadFromFile(null);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 Logger.log(e.getMessage());
-                return null;
+                return loadFromFile(null);
             } finally {
                 if (inputStream != null) {
                     inputStream.close();
@@ -169,76 +161,76 @@ public class ConfigLoader {
             }
         } catch (Exception e) {
             Logger.log(e.getMessage());
-            return null;
+            return loadFromFile(null);
         }
     }
+
+    private JSONObject getDataDict(String config) {
+        String json;
+        boolean isLocalConfig = false;
+        if (config == null) {
+            json = loadJSONFromPrefs();
+            isLocalConfig = true;
+        } else {
+            json = config;
+        }
+        JSONObject result = null;
+        try {
+            result = new JSONObject(json);
+            // save ad config for 24 hours (only from internet!), if ad config not available load from cache
+            if(!Utils.hasValidConfig() && !isLocalConfig) {
+                Logger.log("Save Config");
+                Utils.saveAdConfig(json);
+            }
+        } catch (JSONException e) {
+            Logger.log("Config json error");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public JSONObject runTask() {
+        if (Utils.hasValidConfig()) {
+            String config = Utils.getAdConfig();
+            Logger.log("Config from cache: " + config);
+            //mListener.onConfigLoaded(getDataDict(config));
+            return getDataDict(config);
+        }
+
+        JSONObject configJson = getDataDict(null);
+        String configFromUrl = null;
+        try {
+            configFromUrl = configJson.getString("config_from_url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (configFromUrl != null && configFromUrl.trim().equals("0")) {
+            return loadFromFile(null);
+        }
+
+        String urlString = null;
+        try {
+            urlString = configJson.getString("config_url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return loadFromUrl(urlString);
+    }
+
+    public JSONObject runTaskWithConfig(String config) {
+        return loadFromFile(config);
+    }
+
+    public JSONObject fetch() {
+        return runTask();
+    }
+
 
     private class JobAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
         @Override
         protected JSONObject doInBackground(Void... params) {
-            try {
-                JSONObject jsonObj = loadFromFile();
-                String configFromUrl = jsonObj.getString("config_from_url");
-                if (configFromUrl != null && configFromUrl.trim().equals("0")) {
-                    return jsonObj;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            switch (AdsConstants.SERVER_TYPE) {
-                case PARSE:
-                    JSONObject res1 = null;
-                    try {
-                        res1 = loadFromParse();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if (res1 != null) {
-                        SettingsManager.setStringValue(SettingsManager.ADCONFIG_PARSE_KEY, res1.toString());
-                        return res1;
-                    } else {
-                        try {
-                            if (getAdConfig(AdsConstants.ServerType.PARSE) == null)
-                                return loadFromFile();
-                            else
-                                return new JSONObject(getAdConfig(AdsConstants.ServerType.PARSE));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
-                case SERVER:
-                    JSONObject res2 = loadFromUrl(AdsConstants.ServerType.SERVER);
-                    if (res2 != null) {
-                        SettingsManager.setStringValue(SettingsManager.ADCONFIG_URL_KEY, res2.toString());
-                        return res2;
-                    } else {
-                        try {
-                            JSONObject json = new JSONObject(getAdConfig(AdsConstants.ServerType.SERVER));
-                            if (json == null)
-                                return loadFromFile();
-                            else
-                                return json;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                case FILE:
-                    try {
-                        return loadFromFile();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                default:
-                    try {
-                        return loadFromFile();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-            }
+            return fetch();
         }
 
         @Override
@@ -255,17 +247,6 @@ public class ConfigLoader {
             } catch (Exception e) {
                 Logger.log(e.getMessage());
             }
-        }
-    }
-
-    private String getAdConfig(AdsConstants.ServerType type) {
-        switch (type) {
-            case PARSE:
-                return SettingsManager.getStringValue(SettingsManager.ADCONFIG_PARSE_KEY);
-            case SERVER:
-                return SettingsManager.getStringValue(SettingsManager.ADCONFIG_URL_KEY);
-            default:
-                return null;
         }
     }
 }

@@ -2,6 +2,7 @@ package com.if3games.admanager.ads.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.chartboost.sdk.CBLocation;
 import com.chartboost.sdk.Chartboost;
@@ -87,6 +88,8 @@ public class ChartboostVideoAdapter implements AdapterInterface {
         try {
             appId = params.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
             appSign = params.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
+            Log.d("CB_Video : appId", appId == null ? "null" : appId);
+            Log.d("CB_Video : appSigh", appSign == null ? "null" : appSign);
         } catch (Exception e) {
             e.printStackTrace();
         }

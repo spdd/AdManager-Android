@@ -23,7 +23,7 @@ public class Logger {
     }
 
     public static void log(String msg) {
-        if (msg != null && AdsConstants.DEBUG_SDK == 1 && AdsConstants.LOG_INFO == 1)
-            Log.d("SERVICE_ADS", msg);
+        if (msg != null && AdsConstants.LOG_DEBUG == 1 && AdsConstants.LOG_INFO == 1)
+            Log.d("AD_MANAGER_LOG", msg);
     }
 }

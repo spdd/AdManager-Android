@@ -2,7 +2,9 @@ package com.if3games.admanager.ads;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Debug;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.if3games.admanager.ads.controllers.InterstitialController;
@@ -14,7 +16,7 @@ import org.json.JSONException;
 /**
  * Created by supergoodd on 30.09.15.
  */
-public class AdsManager extends Thread {
+public class AdsManager {
     private static AdsManager instance;
     private Context mContext;
     private boolean autocache;
@@ -27,9 +29,7 @@ public class AdsManager extends Thread {
         return instance;
     }
 
-    private AdsManager() {
-        super("AdsManager init thread");
-    }
+    private AdsManager() {}
 
     public static void initialize(Context context, String adsConfig, boolean autocache) {
         if (instance == null) {
@@ -38,8 +38,11 @@ public class AdsManager extends Thread {
             instance.autocache = autocache;
             SharedPreferences pref = context.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
             pref.edit().putString(SettingsManager.ADCONFIG_UNITY_KEY, adsConfig).apply();
-            Toast.makeText(context, adsConfig, Toast.LENGTH_SHORT).show();
-            instance.start();
+            // init interstitial
+            InterstitialController.initialize(context, autocache);
+            // init video
+            VideoController.initialize(context, autocache);
+            Log.d("ANDROID UNITY_ADS", adsConfig);
         }
     }
 
@@ -48,7 +51,6 @@ public class AdsManager extends Thread {
             instance = getInstance();
             instance.mContext = context;
             instance.autocache = autocache;
-            instance.start();
         }
     }
 
@@ -56,51 +58,11 @@ public class AdsManager extends Thread {
         return mContext;
     }
 
-    @Override
-    public void run() {
-        // Moves the current Thread into the background
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-
-        // init interstitial
-        InterstitialController.initialize(mContext, autocache);
-        // init video
-        VideoController.initialize(mContext, autocache);
-
-        // handle AdsManager thread looper
-        /*
-        try {
-            Looper.prepare();
-            mHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    switch (msg.what) {
-                        case 0:
-                            InterstitialController.getInstance().cache((Context) msg.obj);
-                            break;
-                        case 1:
-                            VideoController.getInstance().cache((Context) msg.obj);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            };
-            Looper.loop();
-        } catch (Throwable t) {
-            Logger.log("Halted");
-        }
-        */
-    }
-
     public static void cacheInterstitial(Context context) {
-        //Message message = instance.mHandler.obtainMessage(0, context);
-        //instance.mHandler.sendMessage(message);
         InterstitialController.getInstance().cache(context);
     }
 
     public static void cacheVideo(Context context) {
-        //Message message = instance.mHandler.obtainMessage(1, context);
-        //instance.mHandler.sendMessage(message);
         VideoController.getInstance().cache(context);
     }
 
@@ -126,6 +88,7 @@ public class AdsManager extends Thread {
 
     public static void showVideo(Context context) {
         try {
+            Log.d("ANDROID UNITY_ADS", "showVideo");
             VideoController.getInstance().show(context);
         } catch (JSONException e) {
             e.printStackTrace();

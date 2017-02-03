@@ -2,6 +2,7 @@ package com.if3games.admanager.ads.controllers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.InterstitialCallbacks;
@@ -117,19 +118,19 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onLoaded(String adName) {
         super.onLoaded(adName);
-        if (userDelegate != null) {
-            userDelegate.onInterstitialLoaded();
+        if (callbacks != null) {
+            callbacks.onInterstitialLoaded();
         }
     }
 
     @Override
     public void onFailedToLoad(String adname) {
         super.onFailedToLoad(adname);
-        if (userDelegate != null) {
+        if (callbacks != null) {
             if (isPrecacheLoaded) {
-                userDelegate.onInterstitialLoaded();
+                callbacks.onInterstitialLoaded();
             } else {
-                userDelegate.onInterstitialFailedToLoad();
+                callbacks.onInterstitialFailedToLoad();
             }
         }
     }
@@ -138,8 +139,8 @@ public class InterstitialController extends BaseAdsController {
     public void onClicked(String adName) {
         if (!isClicked) {
             adsAgent.getAdObject().setClicketAd();
-            if (userDelegate != null) {
-                userDelegate.onInterstitialClicked();
+            if (callbacks != null) {
+                callbacks.onInterstitialClicked();
             }
         }
         super.onClicked(adName);
@@ -148,8 +149,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onClosed(String adName) {
         if (!isClosed) {
-            if (userDelegate != null) {
-                userDelegate.onInterstitialClosed();
+            if (callbacks != null) {
+                callbacks.onInterstitialClosed();
             }
         }
         super.onClosed(adName);
@@ -158,8 +159,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onOpened(String adName) {
         if (!isShown) {
-            if (userDelegate != null) {
-                userDelegate.onInterstitialOpened();
+            if (callbacks != null) {
+                callbacks.onInterstitialOpened();
             }
         }
         super.onOpened(adName);
@@ -171,8 +172,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onPrecacheLoaded(String adname) {
         super.onPrecacheLoaded(adname);
-        if (userDelegate != null) {
-            userDelegate.onInterstitialLoaded();
+        if (callbacks != null) {
+            callbacks.onInterstitialLoaded();
         }
     }
 
@@ -184,8 +185,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onPrecacheClicked(String adname) {
         if (!isPrecacheClicked) {
-            if (userDelegate != null)
-                userDelegate.onInterstitialClicked();
+            if (callbacks != null)
+                callbacks.onInterstitialClicked();
         }
         super.onPrecacheClicked(adname);
     }
@@ -193,8 +194,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onPrecacheClosed(String adname) {
         if (!isPrecacheClosed) {
-            if (userDelegate != null)
-                userDelegate.onInterstitialClosed();
+            if (callbacks != null)
+                callbacks.onInterstitialClosed();
         }
         super.onPrecacheClosed(adname);
     }
@@ -202,8 +203,8 @@ public class InterstitialController extends BaseAdsController {
     @Override
     public void onPrecacheOpened(String adname) {
         if (!isPrecacheShown) {
-            if (userDelegate != null) {
-                userDelegate.onInterstitialOpened();
+            if (callbacks != null) {
+                callbacks.onInterstitialOpened();
             }
         }
         super.onPrecacheOpened(adname);

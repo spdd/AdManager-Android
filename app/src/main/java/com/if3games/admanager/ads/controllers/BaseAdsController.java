@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.UserCallbacks;
@@ -283,7 +284,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         if (Utils.isNetworkConnected(mContext)) { // network available
             isLoading = true;
             // download config from network
-            InstanceFactory.getInstance().createConfigLoader(mContext, this).runAdJob();
+            InstanceFactory.getInstance().createConfigLoader(mContext, this).runConfig();
             if (autocache) {
                 //scheduleRefreshCacheBanner();
             }

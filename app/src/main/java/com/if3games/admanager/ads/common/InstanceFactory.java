@@ -1,6 +1,7 @@
 package com.if3games.admanager.ads.common;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.adapters.AdColonyAdapter;
@@ -10,6 +11,7 @@ import com.if3games.admanager.ads.adapters.ChartboostAdapter;
 import com.if3games.admanager.ads.adapters.ChartboostVideoAdapter;
 import com.if3games.admanager.ads.adapters.UnityAdsAdapter;
 import com.if3games.admanager.ads.config.ConfigLoader;
+import com.if3games.admanager.ads.config.FirebaseConfigLoader;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.if3games.admanager.ads.utils.SettingsManager;
 
@@ -53,18 +55,14 @@ public class InstanceFactory {
     }
 
     public ConfigLoader createConfigLoader(Context contex, ConfigLoader.Listener listener) {
-        return new ConfigLoader(contex, listener);
-    }
-
-    public String createServer(AdsConstants.ServerType serverType) {
-        switch (serverType) {
-            case PARSE:
-                return "https://api.parse.com/1/config";
-            case SERVER:
-                return "https://raw.githubusercontent.com/spdd/testAds/master/response.json";
-            default:
-                return "https://raw.githubusercontent.com/spdd/testAds/master/response.json";
+        try  {
+            Class.forName("com.google.firebase.remoteconfig.FirebaseRemoteConfig");
+            return new FirebaseConfigLoader(contex, listener);
+        }  catch (final ClassNotFoundException e) {
+            Log.d("ADMANAGER" , "Firebase Not found");
+            return new ConfigLoader(contex, listener);
         }
+        //return new ConfigLoader(contex, listener);
     }
 
     public String createRecServer(AdsConstants.ServerType serverType) {

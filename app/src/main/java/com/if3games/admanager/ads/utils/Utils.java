@@ -93,4 +93,16 @@ public class Utils {
         else
             return false;
     }
+
+    public static boolean hasValidConfig() {
+        return false;
+    }
+
+    public static void saveAdConfig(String config) {
+        SettingsManager.setStringValue("LAST_AD_CONFIG_TIME", config);
+    }
+
+    public static String getAdConfig() {
+        return SettingsManager.getStringValue("LAST_AD_CONFIG_TIME");
+    }
 }

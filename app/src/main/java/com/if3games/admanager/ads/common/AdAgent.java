@@ -3,6 +3,7 @@ package com.if3games.admanager.ads.common;
 import android.os.CountDownTimer;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.SettingsManager;
@@ -469,7 +470,7 @@ public class AdAgent implements AdObject.AdObjectListener {
             sortedRangeEnd++;
         }
 
-        if(AdsConstants.DEBUG_SDK == 1) {
+        if(ParamsManager.getInstance().isTestMode()) {
             for (AdObject item : items){
                 if (mAdType == AdType.BANNER) {
                     Logger.log(String.format("Sorted List Banner: %s, cost: %f",

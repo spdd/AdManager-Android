@@ -1,9 +1,9 @@
 package com.if3games.admanager.ads.common;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.adapters.AdColonyAdapter;
 import com.if3games.admanager.ads.adapters.AdMobAdapter;
 import com.if3games.admanager.ads.adapters.AdapterInterface;
@@ -13,10 +13,7 @@ import com.if3games.admanager.ads.adapters.UnityAdsAdapter;
 import com.if3games.admanager.ads.config.ConfigLoader;
 import com.if3games.admanager.ads.config.FirebaseConfigLoader;
 import com.if3games.admanager.ads.controllers.AdsListener;
-import com.if3games.admanager.ads.utils.SettingsManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.if3games.admanager.ads.utils.Logger;
 
 import java.util.HashMap;
 
@@ -59,7 +56,7 @@ public class InstanceFactory {
             Class.forName("com.google.firebase.remoteconfig.FirebaseRemoteConfig");
             return new FirebaseConfigLoader(contex, listener);
         }  catch (final ClassNotFoundException e) {
-            Log.d("ADMANAGER" , "Firebase Not found");
+            Logger.log("Firebase Not found");
             return new ConfigLoader(contex, listener);
         }
         //return new ConfigLoader(contex, listener);
@@ -72,7 +69,7 @@ public class InstanceFactory {
             case SERVER:
                 try {
                     return getServerFromUnityConfig();
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -81,9 +78,9 @@ public class InstanceFactory {
         }
     }
 
-    private String getServerFromUnityConfig() throws JSONException {
-        String json = SettingsManager.getStringValue(SettingsManager.ADCONFIG_UNITY_KEY);
-        JSONObject obj = new JSONObject(json);
-        return obj.getString("config_url");
+    private String getServerFromUnityConfig() {
+        //String json = SettingsManager.getStringValue(SettingsManager.ADCONFIG_UNITY_KEY);
+        String url = ParamsManager.getInstance().getAdConfig().getConfigUrl();
+        return url;
     }
 }

@@ -8,9 +8,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.UserCallbacks;
 import com.if3games.admanager.ads.adapters.AdapterInterface;
 import com.if3games.admanager.ads.adapters.PrecacheAdapter;
@@ -21,10 +21,6 @@ import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.config.ConfigLoader;
 import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.Utils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -117,7 +113,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         }
     }
 
-    public void disableNetwork(String adname) throws JSONException {
+    public void disableNetwork(String adname) {
         adapterInstances.remove(adname);
         loadAd();
     }
@@ -140,15 +136,15 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         loadAd();
     }
 
-    public void show(Context context) throws JSONException {
+    public void show(Context context) {
         showAd(context, null);
     }
 
-    public void show(Context context, String adName) throws JSONException {
+    public void show(Context context, String adName) {
         showAd(context, adName);
     }
 
-    protected void showAd(final Context context, final String adName) throws JSONException {
+    protected void showAd(final Context context, final String adName) {
         if(!isLoaded && !isPrecacheLoaded && !isServerError && !isNoNeedLoad) {
             if (!isLoading) {
                 if (adsAgent.isPrecacheReady) {
@@ -163,11 +159,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        showAd(context);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    showAd(context);
                 }
             }, AdsConstants.PRELOADER_TIMEOUT_FOR_TIMER);
 
@@ -180,11 +172,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            showAd(context);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        showAd(context);
                     }
                 }, AdsConstants.PRELOADER_TIMEOUT_FOR_TIMER);
             }
@@ -193,8 +181,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         }
     }
 
-    protected void showAd(Context context) throws JSONException {
-    }
+    protected void showAd(Context context) {}
 
     /**
      * Internal ad management
@@ -311,6 +298,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             public void run() {
                 isServerError = false;
                 if (config != null) {
+                    ParamsManager.getInstance().setAdConfig(config);
                     //adsAgent.clear();
                     try {
                         /*
@@ -446,7 +434,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             isClicked = false;
             isClosed = false;
             isShown = false;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.log(String.format("%s", e.getMessage()));
         }
@@ -473,7 +461,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             if (adsAgent.isAdsReady) {
                 loadNextAd();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.log(String.format("%s", e.getMessage()));
         }
@@ -544,7 +532,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             isPrecacheShown = false;
             isPrecacheClicked = false;
             isPrecacheClosed = false;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.log(String.format("%s", e.getMessage()));
         }
@@ -565,7 +553,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
             if (adsAgent.isPrecacheReady) {
                 loadPrecache();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.log(String.format("%s", e.getMessage()));
         }

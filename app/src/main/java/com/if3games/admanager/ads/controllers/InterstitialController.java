@@ -2,7 +2,6 @@ package com.if3games.admanager.ads.controllers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.InterstitialCallbacks;
@@ -11,8 +10,6 @@ import com.if3games.admanager.ads.adapters.PrecacheAdapter;
 import com.if3games.admanager.ads.common.AdAgent;
 import com.if3games.admanager.ads.common.InstanceFactory;
 import com.if3games.admanager.ads.utils.Logger;
-
-import org.json.JSONException;
 
 /**
  * Created by supergoodd on 30.09.15.
@@ -65,7 +62,7 @@ public class InterstitialController extends BaseAdsController {
     }
 
     @Override
-    protected void showAd(Context context) throws JSONException {
+    protected void showAd(Context context) {
         Logger.log("Show Interstitial in thread : " + Thread.currentThread().getName());
         if (isLoaded) {
             Logger.logAds(controllerType, String.format("show banner status: %s", status));

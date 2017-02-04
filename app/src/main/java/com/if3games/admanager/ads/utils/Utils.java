@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,10 +100,10 @@ public class Utils {
     }
 
     public static void saveAdConfig(String config) {
-        SettingsManager.setStringValue("LAST_AD_CONFIG_TIME", config);
+        SettingsManager.setStringValue(ParamsManager.LAST_AD_CONFIG_TIME, config);
     }
 
     public static String getAdConfig() {
-        return SettingsManager.getStringValue("LAST_AD_CONFIG_TIME");
+        return SettingsManager.getStringValue(ParamsManager.LAST_AD_CONFIG_TIME);
     }
 }

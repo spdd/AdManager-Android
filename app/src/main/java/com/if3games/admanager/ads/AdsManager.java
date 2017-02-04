@@ -2,16 +2,12 @@ package com.if3games.admanager.ads;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Debug;
 import android.os.Handler;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.if3games.admanager.ads.controllers.InterstitialController;
 import com.if3games.admanager.ads.controllers.VideoController;
+import com.if3games.admanager.ads.utils.Logger;
 import com.if3games.admanager.ads.utils.SettingsManager;
-
-import org.json.JSONException;
 
 /**
  * Created by supergoodd on 30.09.15.
@@ -31,26 +27,28 @@ public class AdsManager {
 
     private AdsManager() {}
 
-    public static void initialize(Context context, String adsConfig, boolean autocache) {
+    public static void initialize(Context context, String adsConfig, boolean isTestMode) {
         if (instance == null) {
             instance = getInstance();
             instance.mContext = context;
-            instance.autocache = autocache;
+            instance.autocache = true;
+            ParamsManager.getInstance().setTestMode(isTestMode);
             SharedPreferences pref = context.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
             pref.edit().putString(SettingsManager.ADCONFIG_UNITY_KEY, adsConfig).apply();
             // init interstitial
-            InterstitialController.initialize(context, autocache);
+            InterstitialController.initialize(context, true);
             // init video
-            VideoController.initialize(context, autocache);
-            Log.d("ANDROID UNITY_ADS", adsConfig);
+            VideoController.initialize(context, true);
+            Logger.log(adsConfig);
         }
     }
 
-    public static void initialize(Context context, boolean autocache) {
+    public static void initialize(Context context, boolean isTestMode) {
         if (instance == null) {
             instance = getInstance();
             instance.mContext = context;
-            instance.autocache = autocache;
+            instance.autocache = true;
+            ParamsManager.getInstance().setTestMode(isTestMode);
         }
     }
 
@@ -73,7 +71,7 @@ public class AdsManager {
     public static void showInterstitial(Context context) {
         try {
             InterstitialController.getInstance().show(context);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -88,9 +86,9 @@ public class AdsManager {
 
     public static void showVideo(Context context) {
         try {
-            Log.d("ANDROID UNITY_ADS", "showVideo");
+            Logger.log("showVideo");
             VideoController.getInstance().show(context);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

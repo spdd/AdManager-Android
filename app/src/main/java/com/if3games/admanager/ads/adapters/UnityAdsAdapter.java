@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 import com.unity3d.ads.android.IUnityAdsListener;
@@ -44,7 +45,7 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
             isInitialized = true;
         }
         UnityAds.changeActivity((Activity)context);
-        if (AdsConstants.DEBUG_SDK == 1) {
+        if (ParamsManager.getInstance().isTestMode()) {
             UnityAds.setDebugMode(true);
             UnityAds.setTestMode(true);
         }

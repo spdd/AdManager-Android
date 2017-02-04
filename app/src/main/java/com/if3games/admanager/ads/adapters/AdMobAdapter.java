@@ -5,7 +5,7 @@ import android.content.Context;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.if3games.admanager.ads.AdsConstants;
+import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
 
@@ -73,8 +73,8 @@ public class AdMobAdapter implements AdapterInterface {
         interstitial.setAdUnitId(adId);
         AdRequest.Builder reqBuilder = new AdRequest.Builder();
 
-        if (AdsConstants.DEBUG_SDK == 1) {
-            //reqBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+        if (ParamsManager.getInstance().isTestMode()) {
+            reqBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
         }
         AdRequest adRequest = reqBuilder.build();
         interstitial.setAdListener(adListener);

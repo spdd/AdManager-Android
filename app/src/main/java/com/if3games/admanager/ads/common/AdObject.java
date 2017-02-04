@@ -3,9 +3,6 @@ package com.if3games.admanager.ads.common;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.utils.Logger;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by supergoodd on 01.10.15.
  */
@@ -62,7 +59,7 @@ public class AdObject {
         }
     }
 
-    public void setLoadedAd(boolean loaded) throws JSONException {
+    public void setLoadedAd(boolean loaded) {
         if (!loaded) {
             if (mListener != null && mListener.getAdType() == AdAgent.AdType.VIDEO) {
                 isVideoCached = false;

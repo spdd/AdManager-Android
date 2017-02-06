@@ -15,8 +15,6 @@ import com.jirbo.adcolony.AdColonyV4VCAd;
 import com.jirbo.adcolony.AdColonyV4VCListener;
 import com.jirbo.adcolony.AdColonyV4VCReward;
 
-import org.json.JSONObject;
-
 /**
  * Created by supergoodd on 06.10.15.
  */
@@ -95,7 +93,7 @@ public class AdColonyAdapter implements AdapterInterface, AdColonyAdListener, Ad
     }
 
     @Override
-    public void showVideo() {
+    public void showVideo(Context context) {
         v4vc_ad.show();
     }
 

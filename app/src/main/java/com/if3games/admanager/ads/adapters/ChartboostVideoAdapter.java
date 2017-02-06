@@ -134,7 +134,7 @@ public class ChartboostVideoAdapter implements AdapterInterface {
     }
 
     @Override
-    public void showVideo() {
+    public void showVideo(Context context) {
         Chartboost.showRewardedVideo(CBLocation.LOCATION_DEFAULT);
         Chartboost.cacheRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }

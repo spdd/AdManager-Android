@@ -1,5 +1,6 @@
 package com.if3games.admanager.ads.controllers;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.if3games.admanager.ads.VideoCallbacks;
@@ -57,15 +58,15 @@ public class VideoController extends BaseAdsController {
             Logger.logAds(controllerType, String.format("show banner status: %s", status));
             AdapterInterface adapter = adapterInstances.get(status);
             if(adapter != null && adapter.isCached()) {
-                adapter.showVideo();
+                adapter.showVideo(context);
             } else if(adsAgent.getCachedVideo() != null) {
                 AdapterInterface nextAdapter = adapterInstances.get(adsAgent.getCachedVideo());
                 if(nextAdapter != null && nextAdapter.isCached())
-                    nextAdapter.showVideo();
+                    nextAdapter.showVideo(context);
             }
         } else if(isPrecacheLoaded && !adsAgent.isPrecacheTmpDisabled) {
             Logger.logAds(controllerType, String.format("show precache banner status: %s", precacheStatus));
-            PrecacheAdapter.getInstance(this).showVideo();
+            PrecacheAdapter.getInstance(this).showVideo(context);
         } else {
             if (adsAgent.isPrecacheReady) {
                 loadPrecache();

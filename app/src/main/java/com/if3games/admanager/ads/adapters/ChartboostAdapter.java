@@ -125,7 +125,7 @@ public class ChartboostAdapter implements AdapterInterface {
     }
 
     @Override
-    public void showVideo() {}
+    public void showVideo(Context context) {}
 
     @Override
     public void onStart(Context context) {

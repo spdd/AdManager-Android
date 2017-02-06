@@ -1,5 +1,6 @@
 package com.if3games.admanager.ads.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.google.android.gms.ads.AdListener;
@@ -108,8 +109,7 @@ public class AdMobAdapter implements AdapterInterface {
     }
 
     @Override
-    public void showVideo() {
-
+    public void showVideo(Context context) {
     }
 
     @Override

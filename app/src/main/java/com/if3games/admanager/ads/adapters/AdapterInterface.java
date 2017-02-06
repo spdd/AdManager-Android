@@ -14,7 +14,7 @@ public interface AdapterInterface {
     boolean isCached();
     boolean isAutoLoadingVideo();
     void showInterstitial();
-    void showVideo();
+    void showVideo(Context context);
     void onStart(Context context);
     void onResume(Context context);
     void onPause(Context context);

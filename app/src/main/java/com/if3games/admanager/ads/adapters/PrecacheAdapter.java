@@ -174,7 +174,8 @@ public class PrecacheAdapter implements AdapterInterface {
     }
 
     @Override
-    public void showVideo() {
+    public void showVideo(Context context)
+    {
         // show video from youtube
     }
 

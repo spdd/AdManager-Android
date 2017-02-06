@@ -3,12 +3,11 @@ package com.if3games.admanager.ads.adapters;
 import android.app.Activity;
 import android.content.Context;
 
-import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.AdsListener;
-import com.unity3d.ads.android.IUnityAdsListener;
-import com.unity3d.ads.android.UnityAds;
+import com.unity3d.ads.IUnityAdsListener;
+import com.unity3d.ads.UnityAds;
 
 /**
  * Created by supergoodd on 07.10.15.
@@ -41,16 +40,14 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     public void initAd(Context context, AdUnit params) {
         String appId = params.unity_ads_id; //.getString("unity_ads_id"); //ConstantsManager.getInstance().getConstants().UNITYADS_APPID; //
         if (!isInitialized) {
-            UnityAds.init((Activity) context, appId, this);
+            UnityAds.initialize((Activity) context, appId, this); //.init((Activity) context, appId, this);
             isInitialized = true;
         }
-        UnityAds.changeActivity((Activity)context);
         if (ParamsManager.getInstance().isTestMode()) {
             UnityAds.setDebugMode(true);
-            UnityAds.setTestMode(true);
         }
         if (longLoadAdCounter > 0) {
-            if (UnityAds.canShow() && UnityAds.canShowAds()) {
+            if (UnityAds.isReady("rewardedVideo")) {
                 mListener.onLoaded(getAdName());
                 UnityAds.setListener(this);
             } else {
@@ -62,7 +59,7 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     @Override
     public boolean isAvailable() {
         try  {
-            Class.forName("com.unity3d.ads.android.view.UnityAdsFullscreenActivity");
+            Class.forName("com.unity3d.ads.adunit.AdUnitActivity");
             return true;
         }  catch (final ClassNotFoundException e) {
             return false;
@@ -85,11 +82,14 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     }
 
     @Override
-    public void showVideo() {
+    public void showVideo(Context context) {
         try {
-            if(UnityAds.canShow() && UnityAds.canShowAds()) {
-                UnityAds.show();
+            if(UnityAds.isReady("rewardedVideo")) {
+                UnityAds.show((Activity) context, "rewardedVideo");
                 longLoadAdCounter++;
+            } else {
+                if (mListener != null)
+                    mListener.onFailedToLoad(getAdName());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,7 +103,6 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
 
     @Override
     public void onResume(Context context) {
-        UnityAds.changeActivity((Activity)context);
     }
 
     @Override
@@ -129,7 +128,7 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     /**
      * Unity Ads listener implementation
      */
-
+/*
     @Override
     public void onHide() {
         mListener.onClosed(getAdName());
@@ -161,5 +160,37 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
     public void onFetchFailed() {
         mListener.onFailedToLoad(getAdName());
         isVideoCached = false;
+    }
+    */
+
+    /**
+     * UnityAds 2.x listener
+     */
+
+    @Override
+    public void onUnityAdsReady(String s) {
+        longLoadAdCounter++;
+        isVideoCached = true;
+        if (mListener != null)
+            mListener.onLoaded(getAdName());
+    }
+
+    @Override
+    public void onUnityAdsStart(String s) {
+        if (mListener != null)
+            mListener.onOpened(getAdName());
+    }
+
+    @Override
+    public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
+        if (mListener != null && finishState != UnityAds.FinishState.SKIPPED && finishState != UnityAds.FinishState.ERROR)
+            mListener.onFinished(getAdName());
+    }
+
+    @Override
+    public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
+        isVideoCached = false;
+        if (mListener != null)
+            mListener.onFailedToLoad(getAdName());
     }
 }

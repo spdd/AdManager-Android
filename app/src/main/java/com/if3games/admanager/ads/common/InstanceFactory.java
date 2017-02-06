@@ -32,17 +32,22 @@ public class InstanceFactory {
 
     public HashMap<String, AdapterInterface> createInterstitialAdapters(final AdsListener listener) {
         HashMap<String, AdapterInterface> adapters = new HashMap<String, AdapterInterface>(){{
-            put(AdMobAdapter.getName(), AdMobAdapter.getInstance(listener));
-            put(ChartboostAdapter.getName(), ChartboostAdapter.getInstance(listener));
+            if (AdMobAdapter.getInstance(listener).isAvailable())
+                put(AdMobAdapter.getName(), AdMobAdapter.getInstance(listener));
+            if (ChartboostAdapter.getInstance(listener).isAvailable())
+                put(ChartboostAdapter.getName(), ChartboostAdapter.getInstance(listener));
         }};
         return adapters;
     }
 
     public HashMap<String, AdapterInterface> createVideoAdapters(final AdsListener listener) {
         HashMap<String, AdapterInterface> adapters = new HashMap<String, AdapterInterface>(){{
-            put(ChartboostAdapter.getName(), ChartboostVideoAdapter.getInstance(listener));
-            put(AdColonyAdapter.getName(), AdColonyAdapter.getInstance(listener));
-            put(UnityAdsAdapter.getName(), UnityAdsAdapter.getInstance(listener));
+            if (ChartboostVideoAdapter.getInstance(listener).isAvailable())
+                put(ChartboostAdapter.getName(), ChartboostVideoAdapter.getInstance(listener));
+            if (AdColonyAdapter.getInstance(listener).isAvailable())
+                put(AdColonyAdapter.getName(), AdColonyAdapter.getInstance(listener));
+            if (UnityAdsAdapter.getInstance(listener).isAvailable())
+                put(UnityAdsAdapter.getName(), UnityAdsAdapter.getInstance(listener));
         }};
         return adapters;
     }

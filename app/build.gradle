@@ -51,9 +51,21 @@ task exportJar(type: Copy) {
     include('classes.jar')
     ///Rename the jar
     rename('classes.jar', 'AdManager.jar')
+
 }
+
+task copyJar(type: Copy) {
+    from('release/')
+    into('../../newRebus/app/libs')
+    include('AdManager.jar')
+}
+
+task buildAdManager(dependsOn: [exportJar, copyJar])
+
+//  ./gradlew buildAdManager
 
 exportJar.dependsOn(deleteOldJar, build)
 
+// ./gradlew exportJar
 
 apply plugin: 'com.google.gms.google-services'

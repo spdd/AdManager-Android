@@ -24,10 +24,10 @@ public class AdConfig {
     private String configUrl;
 
     @SerializedName("ads_interstitial")
-    private List<AdUnit> adsInterstitial = new ArrayList<AdUnit>();
+    public List<AdUnit> adsInterstitial = new ArrayList<AdUnit>();
 
     @SerializedName("ads_video")
-    private List<AdUnit> adsVideo = new ArrayList<AdUnit>();
+    public List<AdUnit> adsVideo = new ArrayList<AdUnit>();
 
 
     public void setAdsInterstitial(List<AdUnit> adsInterstitial) {

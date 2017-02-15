@@ -36,11 +36,10 @@ public class FirebaseConfigLoader extends ConfigLoader {
                             Logger.log("Fire config: " + firebaseRemoteConfig.getString(configKey));
                             if (firebaseRemoteConfig.getString(configKey) != null && firebaseRemoteConfig.getString(configKey).length() != 0) {
                                 mRemoteConfig = firebaseRemoteConfig.getString(configKey);
-                                runAdJob();
                             } else {
                                 Logger.log("Config not fetched");
-                                runAdJob();
                             }
+                            runAdJob();
                         } else {
                             Logger.log("Config not fetched");
                             runAdJob();
@@ -58,7 +57,7 @@ public class FirebaseConfigLoader extends ConfigLoader {
     }
 
     private String getConfigKey() {
-        String[] packageParts = mContext.getPackageName().split(".");
+        String[] packageParts = mContext.getPackageName().split("\\.");
         String prefix = packageParts[packageParts.length - 1].replace("-", "");
         return String.format("%s_ad_config", prefix);
     }

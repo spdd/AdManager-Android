@@ -13,7 +13,6 @@ import com.if3games.admanager.ads.AdsConstants;
 import com.if3games.admanager.ads.ParamsManager;
 import com.if3games.admanager.ads.UserCallbacks;
 import com.if3games.admanager.ads.adapters.AdapterInterface;
-import com.if3games.admanager.ads.adapters.PrecacheAdapter;
 import com.if3games.admanager.ads.common.AdAgent;
 import com.if3games.admanager.ads.common.InstanceFactory;
 import com.if3games.admanager.ads.config.AdConfig;
@@ -148,7 +147,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         if(!isLoaded && !isPrecacheLoaded && !isServerError && !isNoNeedLoad) {
             if (!isLoading) {
                 if (adsAgent.isPrecacheReady) {
-                    loadPrecache();
+                    //loadPrecache();
                 }
 
                 if (adsAgent.isAdsReady) {
@@ -242,7 +241,7 @@ public class BaseAdsController implements AdsListener, PrecacheListener, ConfigL
         precacheStatus = adsAgent.getPrecacheAdObject().getAdName();
         Logger.logAds(controllerType, String.format("Precache Status: %s", precacheStatus));
 
-        final AdapterInterface adapter = PrecacheAdapter.getInstance(this);
+        final AdapterInterface adapter = null; //= PrecacheAdapter.getInstance(this);
         if (adapter.getAdName().trim().equals(precacheStatus)) {
             if (adapter.isAvailable()) {
                 ((Activity)mContext).runOnUiThread(new Runnable() {

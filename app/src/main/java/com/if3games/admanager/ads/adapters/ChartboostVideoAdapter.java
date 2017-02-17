@@ -59,7 +59,10 @@ public class ChartboostVideoAdapter implements AdapterInterface {
 
         // Called after a rewarded video has been viewed completely and user is eligible for reward.
         public void didCompleteRewardedVideo(String location, int reward) {
-            if (mVideoListener != null) mVideoListener.onFinished(getAdName());
+            if (mVideoListener != null) {
+                Logger.log("Chartboost video completed");
+                mVideoListener.onFinished(getAdName());
+            }
         }
     };
 
@@ -135,8 +138,8 @@ public class ChartboostVideoAdapter implements AdapterInterface {
 
     @Override
     public void showVideo(Context context) {
-        Chartboost.showRewardedVideo(CBLocation.LOCATION_DEFAULT);
         Chartboost.cacheRewardedVideo(CBLocation.LOCATION_DEFAULT);
+        Chartboost.showRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override

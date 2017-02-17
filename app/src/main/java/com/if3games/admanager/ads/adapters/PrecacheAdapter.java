@@ -10,23 +10,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.if3games.admanager.R;
 import com.if3games.admanager.ads.common.AdAgent;
 import com.if3games.admanager.ads.config.AdUnit;
 import com.if3games.admanager.ads.controllers.PrecacheListener;
-import com.if3games.admanager.ads.recommended.RecommendManager;
 import com.if3games.admanager.ads.utils.ImageManager;
 import com.if3games.admanager.ads.utils.Logger;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -234,6 +223,7 @@ public class PrecacheAdapter implements AdapterInterface {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
+            /*
             setContentView(R.layout.image_banner_layout);
             try {
                 if (imageUrl == null) {
@@ -279,7 +269,7 @@ public class PrecacheAdapter implements AdapterInterface {
             } catch (Exception e) {
                 Logger.log(e.getMessage());
             }
-
+            */
         }
 
         @Override

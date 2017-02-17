@@ -101,7 +101,6 @@ public class AdsManager {
         return VideoController.getInstance().isLoaded();
     }
 
-
     public static void setInterstitialCallbacks(InterstitialCallbacks callbacks) {
         InterstitialController.getInstance().setInterstitialCallbacks(callbacks);
     }

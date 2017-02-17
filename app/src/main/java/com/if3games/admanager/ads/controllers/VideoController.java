@@ -1,11 +1,9 @@
 package com.if3games.admanager.ads.controllers;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.if3games.admanager.ads.VideoCallbacks;
 import com.if3games.admanager.ads.adapters.AdapterInterface;
-import com.if3games.admanager.ads.adapters.PrecacheAdapter;
 import com.if3games.admanager.ads.common.AdAgent;
 import com.if3games.admanager.ads.common.InstanceFactory;
 import com.if3games.admanager.ads.utils.Logger;
@@ -66,7 +64,7 @@ public class VideoController extends BaseAdsController {
             }
         } else if(isPrecacheLoaded && !adsAgent.isPrecacheTmpDisabled) {
             Logger.logAds(controllerType, String.format("show precache banner status: %s", precacheStatus));
-            PrecacheAdapter.getInstance(this).showVideo(context);
+            //PrecacheAdapter.getInstance(this).showVideo(context);
         } else {
             if (adsAgent.isPrecacheReady) {
                 loadPrecache();
@@ -113,6 +111,10 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onLoaded(String adName) {
         super.onLoaded(adName);
+        if (userDelegate != null) {
+            userDelegate.onVideoLoaded();
+        }
+
         if (callbacks != null) {
             callbacks.onVideoLoaded();
         }
@@ -121,6 +123,14 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onFailedToLoad(String adname) {
         super.onFailedToLoad(adname);
+        if (userDelegate != null) {
+            if (isPrecacheLoaded) {
+                userDelegate.onVideoLoaded();
+            } else {
+                userDelegate.onVideoFailedToLoad();
+            }
+        }
+
         if (callbacks != null) {
             if (isPrecacheLoaded) {
                 callbacks.onVideoLoaded();
@@ -133,6 +143,9 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onClicked(String adName) {
         if (!isClicked) {
+            if (userDelegate != null) {
+                userDelegate.onVideoClicked();
+            }
             if (callbacks != null) {
                 callbacks.onVideoClicked();
             }
@@ -143,6 +156,9 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onClosed(String adName) {
         if (!isClosed) {
+            if (userDelegate != null) {
+                userDelegate.onVideoClosed();
+            }
             if (callbacks != null) {
                 callbacks.onVideoClosed();
             }
@@ -153,6 +169,9 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onOpened(String adName) {
         if (!isShown) {
+            if (userDelegate != null) {
+                userDelegate.onVideoOpened();
+            }
             if (callbacks != null) {
                 callbacks.onVideoOpened();
             }
@@ -164,6 +183,9 @@ public class VideoController extends BaseAdsController {
     @Override
     public void onFinished(String adname) {
         super.onFinished(adname);
+        if (userDelegate != null) {
+            userDelegate.onVideoFinished();
+        }
         if (callbacks != null) {
             callbacks.onVideoFinished();
         }

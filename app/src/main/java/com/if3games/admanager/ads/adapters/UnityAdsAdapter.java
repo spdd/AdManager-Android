@@ -183,7 +183,7 @@ public class UnityAdsAdapter implements AdapterInterface, IUnityAdsListener {
 
     @Override
     public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-        if (mListener != null && finishState != UnityAds.FinishState.SKIPPED && finishState != UnityAds.FinishState.ERROR)
+        if (mListener != null && finishState == UnityAds.FinishState.COMPLETED)
             mListener.onFinished(getAdName());
     }
 

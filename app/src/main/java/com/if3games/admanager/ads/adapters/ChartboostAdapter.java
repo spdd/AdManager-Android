@@ -27,34 +27,40 @@ public class ChartboostAdapter implements AdapterInterface {
          */
         // Called after an interstitial has been displayed on the screen.
         public void didDisplayInterstitial(String location) {
-            mInterstitialListener.onOpened(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onOpened(getAdName());
         }
 
         // Called after an interstitial has been loaded from the Chartboost API
         // servers and cached locally.
         public void didCacheInterstitial(String location) {
-            mInterstitialListener.onLoaded(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onLoaded(getAdName());
         }
 
         // Called after an interstitial has attempted to load from the Chartboost API
         // servers but failed.
         public void didFailToLoadInterstitial(String location, CBError.CBImpressionError error) {
-            mInterstitialListener.onFailedToLoad(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onFailedToLoad(getAdName());
         }
 
         // Called after an interstitial has been dismissed.
         public void didDismissInterstitial(String location) {
-            mInterstitialListener.onClosed(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onClosed(getAdName());
         }
 
         // Called after an interstitial has been closed.
         public void didCloseInterstitial(String location) {
-            mInterstitialListener.onClosed(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onClosed(getAdName());
         }
 
         // Called after an interstitial has been clicked.
         public void didClickInterstitial(String location) {
-            mInterstitialListener.onClicked(getAdName());
+            if(mInterstitialListener != null)
+                mInterstitialListener.onClicked(getAdName());
         }
     };
 
@@ -82,8 +88,8 @@ public class ChartboostAdapter implements AdapterInterface {
         try {
             appId = params.cb_appId; //.getString("cb_appId"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPID;
             appSign = params.cb_appSigh; //.getString("cb_appSigh"); //ConstantsManager.getInstance().getConstants().CHARBOOST_APPSIGH;
-            Log.d("CB_Inter : appId", appId == null ? "null" : appId);
-            Log.d("CB_Inter : appSigh", appSign == null ? "null" : appSign);
+            Logger.log("CB_Inter : appId" + appId);
+            Logger.log("CB_Inter : appSigh" + appSign);
         } catch (Exception e) {
             e.printStackTrace();
         }

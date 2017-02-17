@@ -42,6 +42,7 @@ dependencies {
 //task to delete the old jar
 task deleteOldJar(type: Delete) {
     delete 'release/AdManager.jar'
+    delete '../../newRebus/app/libs/AdManager.jar'
 }
 
 //task to export contents as jar
@@ -52,11 +53,16 @@ task exportJar(type: Copy) {
     ///Rename the jar
     rename('classes.jar', 'AdManager.jar')
 
+    copy {
+        from 'release/'
+        into '../../newRebus/app/libs/'
+        include('AdManager.jar')
+    }
 }
 
 task copyJar(type: Copy) {
     from('release/')
-    into('../../newRebus/app/libs')
+    into('../../newRebus/app/libs/')
     include('AdManager.jar')
 }
 
